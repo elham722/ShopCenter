@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <partial name="_MetaTagsAdmin" />
+    <title>@ViewData["Title"]</title>
+    <partial name="_LinkAdmin" />
+</head>
+
+<body>
+    <!-- Loading Container -->
+    <div class="loading-container">
+        <div class="loader"></div>
+    </div>
+    <!--  /Loading Container -->
+    <!-- Navbar -->
+    <partial name="_NavbarAdmin
+" />
+    <!-- /Navbar -->
+    <!-- Main Container -->
+   @RenderBody()
+    <partial name="_ScriptsAdmin" />
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <partial name="_MetaTags" />
+    <title>@ViewData["Title"]</title>
+    <partial name="_Link" />
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+        <!-- start of page-header -->
+        <partial name="_PageHeader" />
+        <!-- end of page-header -->
+       
+        <!-- start of page-content -->
+       @RenderBody()
+        <!-- end of page-content -->
+        <partial name="_Footer" />
+    </div>
+
+    <partial name="_Scripts" />
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>
