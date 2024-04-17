@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ShopCenter.Data.Context;
 using ShopCenter.IoC.Dependency;
@@ -18,7 +19,21 @@ builder.Services.AddDbContext<ShopCenterDBContext>(
 
 #endregion
 
+#region Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
+}).AddCookie(options =>
+{
+    options.LoginPath = "/Login";
+    options.LogoutPath = "/Logout";
+    options.ExpireTimeSpan = TimeSpan.FromDays(20);
+});
+
+#endregion
 DependencyContainer.RegisterServices(builder.Services);
 
 var app = builder.Build();

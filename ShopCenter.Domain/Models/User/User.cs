@@ -24,7 +24,7 @@ namespace ShopCenter.Domain.Models.User
         public string? NationalNumber { get; set; }
 
         [MaxLength(100)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [MaxLength(11)]
         public string? PhoneNumber { get; set; }
@@ -33,11 +33,11 @@ namespace ShopCenter.Domain.Models.User
 
         [MaxLength(200)]
         [MinLength(8)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         public DateTime? BirthDate { get; set; }
 
-        public string? ActivationCode { get; set; }
+        public string ActivationCode { get; set; }
 
         public bool IsActive { get; set; }
 

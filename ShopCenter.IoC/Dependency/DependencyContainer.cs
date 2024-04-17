@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ShopCenter.Application.Services.Implementation.User;
-using ShopCenter.Application.Services.Interface.User;
-using ShopCenter.Data.Repository.User;
-using ShopCenter.Domain.Interfaces.User;
+using ShopCenter.Application.Convertors;
+using ShopCenter.Application.Services.Implementation;
+using ShopCenter.Application.Services.Interface;
+using ShopCenter.Data.Repository;
+using ShopCenter.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,12 @@ namespace ShopCenter.IoC.Dependency
 
             services.AddScoped<IUserRepository,UserRepository>();
 
+
             #endregion
 
 
             #region Services
-
+            services.AddScoped<IViewRenderService, RenderViewToString>();
             services.AddScoped<IUserServices,UserServices>();
 
             #endregion
