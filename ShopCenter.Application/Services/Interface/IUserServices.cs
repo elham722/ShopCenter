@@ -11,7 +11,7 @@ namespace ShopCenter.Application.Services.Interface
     public interface IUserServices
     {
         Task<User> GetUserByEmail(string email);
-
+        User GetUserByEmailSync(string email);
         Task<User> GetUserByPhoneNumber(string phone);
 
         void RegisterUser(string email,RegisterViewModel register);
@@ -22,5 +22,11 @@ namespace ShopCenter.Application.Services.Interface
 
         Task<bool> IsExistUserByActivationCode(string activationCode);
         Task<bool> ResetUserPassword(string activeCode, ResetPasswordViewModel resetPassword);
+
+        UserInformationsViewModel GetUserInformationsForShow(string emailOrPhoneNumber);
+        User ConfirmUserInformations(string userEmailOrPhoneNumber, string firstName = "", string lastName = "", string nationalNumber = ""
+            , string phoneNumber = "", string email = "", string birthDate = "");
+
+        void ChangeUserPassword(string emailOrPhoneNumber, string password);
     }
 }

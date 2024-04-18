@@ -145,7 +145,7 @@ namespace ShopCenter.Web.Controllers
                     IsPersistent = true
                 };
                 HttpContext.SignInAsync(principal, properties);
-                return View();
+                return Redirect("/UserPanel");
 
 
             }
@@ -192,7 +192,7 @@ namespace ShopCenter.Web.Controllers
                     return View(verification);
                 }
                 _userServices.RegisterUserByPhoneNumber(phone);
-                return Redirect("/");
+                return Redirect("/UserPanel");
             }
 
 
@@ -217,7 +217,7 @@ namespace ShopCenter.Web.Controllers
             };
 
             HttpContext.SignInAsync(principal, properties);
-            return Redirect("/");
+            return Redirect("/UserPanel");
 
 
         }

@@ -32,6 +32,10 @@ namespace ShopCenter.Data.Repository
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+        public User GetUserByEmailSynce(string email)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.Email == email);
+        }
 
         public async Task<User> GetUserByPhoneNumber(string phone)
         {
@@ -56,6 +60,11 @@ namespace ShopCenter.Data.Repository
         public async Task<bool> IsExistUserByActivationCode(string activationCode)
         {
             return await _dbContext.Users.AnyAsync(u => u.ActivationCode == activationCode); 
+        }
+
+        public  User GetUserInformation(string EmailOrPhoneNumber)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.Email == EmailOrPhoneNumber || u.PhoneNumber == EmailOrPhoneNumber);
         }
     }
 }

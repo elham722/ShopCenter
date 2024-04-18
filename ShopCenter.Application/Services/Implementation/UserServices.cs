@@ -1,4 +1,5 @@
-﻿using ShopCenter.Application.Convertors;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopCenter.Application.Convertors;
 using ShopCenter.Application.Generators;
 using ShopCenter.Application.Security;
 using ShopCenter.Application.Services.Interface;
@@ -40,7 +41,7 @@ namespace ShopCenter.Application.Services.Implementation
         {
             return await _userRepository.GetUserByEmail(email);
         }
-
+       
         public async Task<User> GetUserByPhoneNumber(string phone)
         {
             return await _userRepository.GetUserByPhoneNumber(phone);
@@ -114,6 +115,69 @@ namespace ShopCenter.Application.Services.Implementation
             _userRepository.UpdateUser(user);
             _userRepository.Save();
             return true;
+        }
+
+        public UserInformationsViewModel GetUserInformationsForShow(string emailOrPhoneNumber)
+        {
+            var user = _userRepository.GetUserInformation(emailOrPhoneNumber);
+            if (user != null)
+            {
+                var newUserVM= new UserInformationsViewModel()
+                {
+                    Email=user.Email,
+                    PhoneNumber=user.PhoneNumber,
+                    BirthDate=user.BirthDate,
+                    FirstName=user.FirstName,
+                    LastName=user.LastName,
+                    NationalNumber=user.NationalNumber,
+                    
+                };
+                return newUserVM;
+            }
+            return null;
+        }
+
+        public User ConfirmUserInformations(string userEmailOrPhoneNumber, string firstName = "", string lastName = "", string nationalNumber = "",
+            string phoneNumber = "", string email = "", string birthDate = "")
+        {
+            var user = _userRepository.GetUserInformation(userEmailOrPhoneNumber);
+            if (!string.IsNullOrEmpty(firstName) || !string.IsNullOrEmpty(lastName))
+            {
+                user.FirstName = firstName;
+                user.LastName = lastName;
+            }
+            if (!string.IsNullOrEmpty(nationalNumber))
+            {
+                user.NationalNumber = nationalNumber;
+            }
+            if (!string.IsNullOrEmpty(phoneNumber))
+            {
+                user.PhoneNumber = phoneNumber;
+            }
+            if (!string.IsNullOrEmpty(email))
+            {
+                user.Email = EmailConvertor.FixEmail(email);
+            }
+            if (!string.IsNullOrEmpty(birthDate))
+            {
+                user.BirthDate = DateTime.Parse(birthDate);
+            }
+        
+            _userRepository.Save();
+            return user;
+        }
+
+        public void ChangeUserPassword(string emailOrPhoneNumber, string password)
+        {
+            var user = _userRepository.GetUserInformation(emailOrPhoneNumber);
+            user.Password = PasswordHasher.HashPasswordMD5(password);
+         
+            _userRepository.Save();
+        }
+
+        public User GetUserByEmailSync(string email)
+        {
+            return _userRepository.GetUserByEmailSynce(email);
         }
     }
 }

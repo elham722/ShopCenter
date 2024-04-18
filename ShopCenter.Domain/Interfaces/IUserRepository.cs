@@ -17,11 +17,15 @@ namespace ShopCenter.Domain.Interfaces
         Task<User> IsExistUserForLoginByEmail(string email, string password);
 
         Task<User> GetUserByEmail(string email);
+        User GetUserByEmailSynce(string email);
 
         Task<User> GetUserByPhoneNumber(string phone);
 
         Task<User> UserWithActiveCode(string activeCode);
 
         Task<bool> IsExistUserByActivationCode(string activationCode);
+
+        User GetUserInformation(string EmailOrPhoneNumber);
+        
     }
 }

@@ -35,7 +35,9 @@ builder.Services.AddAuthentication(options =>
 
 #endregion
 DependencyContainer.RegisterServices(builder.Services);
-
+builder.Services.AddRazorPages();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,6 +53,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -61,5 +65,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

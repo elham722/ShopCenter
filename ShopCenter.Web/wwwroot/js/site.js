@@ -32,7 +32,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserFullName",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserFullName",
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
                 success: function (res) {
@@ -51,7 +51,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserNationalNumber",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserNationalNumber",
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
                 success: function (res) {
@@ -69,7 +69,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserEmail",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserEmail",
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
                 success: function (res) {
@@ -90,7 +90,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserPhoneNumber",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserPhoneNumber",
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
                 success: function (res) {
@@ -113,7 +113,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserBirthDate",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserBirthDate",
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
                 success: function (res) {
@@ -136,7 +136,7 @@ $(function () {
             e.preventDefault();
             $.ajax({
                 type: "Post",
-                url: "/UserPanel/UserInformations/ConfirmUserPassword",
+                url: "/UserPanel/UserAccountInformation/ConfirmUserPassword",
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: data,
                 beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
