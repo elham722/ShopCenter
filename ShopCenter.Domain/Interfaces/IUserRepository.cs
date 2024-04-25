@@ -1,4 +1,5 @@
 ﻿using ShopCenter.Domain.Models.User;
+using ShopCenter.Domain.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace ShopCenter.Domain.Interfaces
 
         void UpdateUser(User user);
 
+        Task<User> GetUserById(int id);
+        User GetUserByIdSynce(int id);
+
         Task<User> IsExistUserForLoginByEmail(string email, string password);
 
         Task<User> GetUserByEmail(string email);
@@ -26,6 +30,12 @@ namespace ShopCenter.Domain.Interfaces
         Task<bool> IsExistUserByActivationCode(string activationCode);
 
         User GetUserInformation(string EmailOrPhoneNumber);
-        
+
+
+        Task<List<UsersListViewModel>> GetAllUsers();
+
+        bool IsExistsEmail(string email);
+
+        bool IsExistsPhoneNumber(string phone);
     }
 }

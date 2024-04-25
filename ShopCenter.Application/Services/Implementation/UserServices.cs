@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using ShopCenter.Application.Convertors;
 using ShopCenter.Application.Generators;
 using ShopCenter.Application.Security;
 using ShopCenter.Application.Services.Interface;
+using ShopCenter.Application.StaticTools;
 using ShopCenter.Core.Senders;
+using ShopCenter.Data.Migrations;
 using ShopCenter.Domain.Interfaces;
 using ShopCenter.Domain.Models.User;
 using ShopCenter.Domain.ViewModels.User;
@@ -12,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
+using static ShopCenter.Domain.Models.Common.Enums;
 
 namespace ShopCenter.Application.Services.Implementation
 {
@@ -178,6 +184,213 @@ namespace ShopCenter.Application.Services.Implementation
         public User GetUserByEmailSync(string email)
         {
             return _userRepository.GetUserByEmailSynce(email);
+        }
+
+
+        public async Task<List<UsersListViewModel>> GetUsersList()
+        {
+            List<UsersListViewModel> users= await _userRepository.GetAllUsers();
+            return users;
+        }
+
+     
+        public async Task<bool> DeleteUser(int UserId)
+        {
+            User user =await _userRepository.GetUserById(UserId);
+            if (user == null)
+            {
+                return false;
+            }
+            if (user.AvatarName != "Default.png")
+            {
+
+                ImageTools.DeleteImageFromHard(user.AvatarName, "user");
+                user.AvatarName = "Default.png";
+            }
+            user.IsDelete = true;
+            user.Email = "Deleted";
+            _userRepository.UpdateUser(user);
+            _userRepository.Save();
+
+            return true;
+        }
+
+
+        public AddOrEditUserByAdminResult EditUserByAdmin(EditUserViewModel user, int roleId)
+        {
+            var exituser = _userRepository.GetUserByIdSynce(user.UserId);
+            if (exituser == null)
+            {
+                return AddOrEditUserByAdminResult.UserNotFound;
+            }
+            if (user.Email != null)
+            {
+                if (_userRepository.IsExistsEmail(user.Email) && user.Email != exituser.Email)
+                {
+                    return AddOrEditUserByAdminResult.DuplicateEmail;
+                }
+            }
+            if (user.PhoneNumber != null)
+            {
+
+                if (_userRepository.IsExistsPhoneNumber(user.PhoneNumber))
+                {
+                    return AddOrEditUserByAdminResult.DuplicatePhoneNumber;
+                }
+            }
+
+            if (user.UserAvatar != null)
+            {
+                if (!ImageTools.ImageExtensionIsValid(user.UserAvatar))
+                {
+                    return AddOrEditUserByAdminResult.ImageExensionInvalid;
+                }
+                if (!ImageTools.ImageSizeIsValid(user.UserAvatar))
+                {
+                    return AddOrEditUserByAdminResult.ImageSizeInvalid;
+                }
+                if (user.AvatarName != null && user.AvatarName != "Default.png") { ImageTools.DeleteImageFromHard(user.AvatarName, "user"); }
+                string avatar = null;
+                ImageTools.AddImageToHard(user.UserAvatar, NameGenerator.GenerateUniqName().ToString(), "user", out avatar);
+                user.AvatarName = avatar;
+                exituser.AvatarName = user.AvatarName;
+            }
+            else
+            {
+                exituser.AvatarName = "Default.png";
+            }
+
+            if(user.Password != null)
+            {
+                exituser.Password = PasswordHasher.HashPasswordMD5(user.Password);
+               
+            }
+            exituser.Id = user.UserId;
+            exituser.RoleId = roleId;
+            exituser.Email = EmailConvertor.FixEmail(user.Email);
+            user.Password = exituser.Password;
+            exituser.FirstName = user.FirstName;
+            exituser.LastName = user.LastName;
+            exituser.PhoneNumber = user.PhoneNumber;
+            exituser.IsActive = user.IsActive;
+
+            if (user.CreateActivationCode)
+            {
+                exituser.ActivationCode = NameGenerator.GenerateUniqName();
+
+                #region send email
+                string body = _viewRenderService.RenderToStringAsync("User/_ActiveCodeEmail", exituser);
+                SendEmail.Send(user.Email, " فعالسازی حساب کاربری", body);
+                #endregion
+            }
+
+            _userRepository.UpdateUser(exituser);
+            _userRepository.Save();
+            return AddOrEditUserByAdminResult.Done;
+
+        }
+        public AddOrEditUserByAdminResult AddUserByAdmin(CreateUserViewModel newUser, int roleId)
+        {
+            
+            if ( _userRepository.IsExistsEmail(newUser.Email))
+            {
+                return AddOrEditUserByAdminResult.DuplicateEmail;
+            }
+            if(newUser.PhoneNumber != null) { 
+
+            if ( _userRepository.IsExistsPhoneNumber(newUser.PhoneNumber))
+            {
+                return AddOrEditUserByAdminResult.DuplicatePhoneNumber;
+            }
+            }
+            string avatar;
+            if (newUser.UserAvatar != null)
+            {
+                if (!ImageTools.ImageExtensionIsValid(newUser.UserAvatar))
+                {
+                    return AddOrEditUserByAdminResult.ImageExensionInvalid;
+                }
+                if (!ImageTools.ImageSizeIsValid(newUser.UserAvatar))
+                {
+                    return AddOrEditUserByAdminResult.ImageSizeInvalid;
+                }
+                ImageTools.AddImageToHard(newUser.UserAvatar, NameGenerator.GenerateUniqName(), "user", out avatar);
+            }
+            else
+            {
+                avatar = "Default.png";
+            }
+          
+            var ouser = new User()
+            {
+                RoleId= roleId,
+                Email = EmailConvertor.FixEmail(newUser.Email),
+                Password = PasswordHasher.HashPasswordMD5(newUser.Password),
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+              MessageCode= RandomNumberGenerator.GenerateRendomInteger(10000, 99999),
+                PhoneNumber = newUser.PhoneNumber,
+                AvatarName = avatar,
+                IsActive = newUser.IsActive,
+                ActivationCode = NameGenerator.GenerateUniqName(),
+            };
+  
+            if (newUser.CreateActivationCode)
+            {
+                ouser.ActivationCode = NameGenerator.GenerateUniqName();
+
+                #region send email
+                string body = _viewRenderService.RenderToStringAsync("User/_ActiveCodeEmail", ouser);
+                SendEmail.Send(newUser.Email, " فعالسازی حساب کاربری", body);
+                #endregion
+            }
+
+            _userRepository.AddUser(ouser);
+             _userRepository.Save();
+            return AddOrEditUserByAdminResult.Done;
+        }
+
+        public async Task<DetailsUserViewModel> GetDetailsUserForShow(int UserId)
+        {
+            var user = await _userRepository.GetUserById(UserId);
+            if (user == null)
+            {
+                return null;
+            }
+            var detail = new DetailsUserViewModel()
+            {
+                AvatarName= user.AvatarName,
+                UserId = UserId,
+                BirthDate = user.BirthDate,
+                Email = user.Email,
+                FullName =user.FirstName+ " " +user.LastName,
+                NationalNumber = user.NationalNumber,
+                PhoneNumber = user.PhoneNumber,
+                RegisterDate = user.CreateDate
+            };
+            return detail;
+        }
+
+        public async Task<EditUserViewModel> ShowDetailsForEditUserByAdmin(int UserId)
+        {
+            var user = await _userRepository.GetUserById(UserId);
+            if (user == null)
+            {
+                return null;
+            }
+            var detail = new EditUserViewModel()
+            {
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName, 
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                IsActive=user.IsActive,
+                RoleId=user.RoleId,
+                Password=user.Password,
+                AvatarName = user.AvatarName,
+            };
+            return detail;
         }
     }
 }

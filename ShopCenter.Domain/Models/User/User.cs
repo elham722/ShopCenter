@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,9 @@ namespace ShopCenter.Domain.Models.User
 {
     public class User:BaseEntities
     {
+        public int RoleId { get; set; }
 
-        
+
         [MaxLength(200)]
         public string? FirstName { get; set; }
 
@@ -44,5 +46,13 @@ namespace ShopCenter.Domain.Models.User
         public bool IsAdmin { get; set; }
 
         public string AvatarName { get; set; } = "Default.png";
+
+
+        #region Relations
+
+        [ForeignKey("RoleId")]
+        public Role Role { get; set; }
+
+        #endregion
     }
 }

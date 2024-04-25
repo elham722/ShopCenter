@@ -5,6 +5,8 @@
     <partial name="_MetaTagsAdmin" />
     <title>@ViewData["Title"]</title>
     <partial name="_LinkAdmin" />
+    <script src="/Admin/js/skins.min.js"></script>
+    @RenderSection("Style", false)
 </head>
 
 <body>
@@ -14,12 +16,32 @@
     </div>
     <!--  /Loading Container -->
     <!-- Navbar -->
-    <partial name="_NavbarAdmin
-" />
+    <partial name="_NavbarAdmin" />
     <!-- /Navbar -->
     <!-- Main Container -->
-   @RenderBody()
+    <div class="main-container container-fluid">
+        <partial name="_PageSlider" />
+        <!-- Page Container -->
+        <div class="page-container">
+
+            <partial name="_ChatBar" />
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <partial name="_PageHeader" />
+                <!-- Page Body -->
+                <div class="page-body">
+                    @RenderBody()
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+        </div>
+        <!-- /Page Container -->
+        <!-- Main Container -->
+    </div>
     <partial name="_ScriptsAdmin" />
+    @RenderSection("Script", false)
 </body>
 
 </html>

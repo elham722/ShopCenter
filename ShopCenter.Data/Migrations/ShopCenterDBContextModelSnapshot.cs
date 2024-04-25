@@ -22,6 +22,59 @@ namespace ShopCenter.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ShopCenter.Domain.Models.User.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDefaultForNewUsers")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RoleTiltle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8709),
+                            IsDefaultForNewUsers = false,
+                            IsDelete = false,
+                            RoleTiltle = "مدیر سایت"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8724),
+                            IsDefaultForNewUsers = false,
+                            IsDelete = false,
+                            RoleTiltle = "دستیار مدیر"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8725),
+                            IsDefaultForNewUsers = true,
+                            IsDelete = false,
+                            RoleTiltle = "کاربر عادی"
+                        });
+                });
+
             modelBuilder.Entity("ShopCenter.Domain.Models.User.User", b =>
                 {
                     b.Property<int>("Id")
@@ -80,9 +133,30 @@ namespace ShopCenter.Data.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ShopCenter.Domain.Models.User.User", b =>
+                {
+                    b.HasOne("ShopCenter.Domain.Models.User.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ShopCenter.Domain.Models.User.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,7 +19,7 @@ namespace ShopCenter.IoC.Dependency
             #region Repositories
 
             services.AddScoped<IUserRepository,UserRepository>();
-
+            services.AddScoped<IPermissionRepository,PermissionRepository>();
 
             #endregion
 
@@ -27,7 +27,7 @@ namespace ShopCenter.IoC.Dependency
             #region Services
             services.AddScoped<IViewRenderService, RenderViewToString>();
             services.AddScoped<IUserServices,UserServices>();
-
+            services.AddScoped<IPermissionService, PermissionService>();
             #endregion
 
         }

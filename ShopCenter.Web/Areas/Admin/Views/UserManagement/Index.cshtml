@@ -1,0 +1,146 @@
+﻿@using PersianDate.Standard
+@using ShopCenter.Domain.Models.User
+@model IEnumerable<UsersListViewModel>
+@{
+    ViewData["Title"] = "مدیریت کاربران";
+
+}
+
+<div class="row">
+    <div class="col-xs-12 col-md-12" id="againloadrow">
+        <div class="widget">
+            <div class="widget-header ">
+                <span class="widget-caption">@ViewData["Title"]</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="table-toolbar">
+                    <a id="editabledatatable_new" class="btn btn-primary " onclick="LoadCreateUserModalBody()">
+                        افزودن کاربر جدید
+                    </a>
+
+                </div>
+                <div class="widget-body bordered-right ">
+                    <form class="form-inline" role="form" method="get">
+                        <div class="form-group">
+                            <div id="datatable_filter" class="dataTables_filter">
+                                <label class="sr-only" f>نام و نام خانوادگی </label>
+                                <input name="fullName" type="search" class="form-control" placeholder="نام و نام خانوادگی " aria-controls="datatable">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="datatable_filter" class="dataTables_filter">
+                                <label class="sr-only">شماره تماس</label>
+                                <input name="phoneNumber" type="search" class="form-control" placeholder=" شماره تماس" aria-controls="datatable">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div id="datatable_filter" class="dataTables_filter">
+                            <label class="sr-only">ایمیل</label>
+                            <input name="email" type="search" class="form-control" placeholder=" ایمیل" aria-controls="datatable">
+                        </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-info ">جستجو </button>
+                        <button onclick="clearSearchFields()" class="btn btn-yellow">پاک کردن  </button>
+                        
+                    </form>
+                </div>
+                <br />
+                @if (Model != null && Model.Any())
+                {
+                    <table class="table table-striped table-hover table-bordered" id="refreshtable">
+                        <thead>
+                            <tr role="row">
+                                <th>نام و نام خانوادگی</th>
+                                <th> ایمیل</th>
+                                <th>شماره همراه</th>
+                                <th> نقش کاربر</th>
+                                <th> وضعیت</th>
+                                <th> عملیات</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr id="User-@item.UserId">
+                                    <td>
+
+                                        @item.FullName
+                                    </td>
+
+                                    <td>
+                                        @item.Email
+                                    </td>
+                                    <td>@item.PhoneNumber </td>
+                                    <td>
+                                        @item.Role.RoleTiltle
+                                    </td>
+
+                                    <td>
+                                        <span class="label  @(item.IsActive? "label-palegreen" : "label-orange")">
+                                            @(item.IsActive ? "فعال" : "غیرفعال")
+                                        </span>
+                                    </td>
+
+
+                                    <td>
+                                        <a class="btn btn-yellow btn-xs details" onclick="LoadDetailUserModalBody('@item.UserId')"><i class="fa fa-info-circle"></i> جزئیات</a>
+                                        <a class="btn btn-info btn-xs edit" onclick="LoadEditUserModalBody('@item.UserId')"><i class="fa fa-edit"></i> ویرایش</a>
+                                        <a class="btn btn-danger btn-xs delete" onclick="DeleteProduct('@item.UserId')"><i class="fa fa-trash-o"></i> حذف</a>
+                                    </td>
+
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger w-100 text-center" role="alert">
+                        در حال حاضر کاربری در سایت ثبت نام نکرده است
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalAddUser" class="modal fade" tabindex="-1" aria-labelledby="AddUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content" id="AddUserModalContent">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DetailsUserModal" tabindex="-1" aria-labelledby="DetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="DetailsUserModalContent">
+        </div>
+    </div>
+</div>
+
+<div id="modalEditUser" class="modal fade" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content" id="EditUserModalContent">
+           
+        </div>
+    </div>
+</div>

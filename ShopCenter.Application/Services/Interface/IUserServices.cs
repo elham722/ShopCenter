@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ShopCenter.Domain.Models.Common.Enums;
 
 namespace ShopCenter.Application.Services.Interface
 {
@@ -28,5 +29,17 @@ namespace ShopCenter.Application.Services.Interface
             , string phoneNumber = "", string email = "", string birthDate = "");
 
         void ChangeUserPassword(string emailOrPhoneNumber, string password);
+
+
+        Task<List<UsersListViewModel>> GetUsersList();
+
+
+        AddOrEditUserByAdminResult AddUserByAdmin(CreateUserViewModel newUser,int roleId);
+        AddOrEditUserByAdminResult EditUserByAdmin(EditUserViewModel user, int roleId);
+        Task<DetailsUserViewModel> GetDetailsUserForShow(int UserId);
+
+        Task<EditUserViewModel> ShowDetailsForEditUserByAdmin(int UserId);
+
+        Task<bool> DeleteUser(int UserId);
     }
 }

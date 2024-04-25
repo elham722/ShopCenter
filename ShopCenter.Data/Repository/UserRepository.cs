@@ -2,6 +2,7 @@
 using ShopCenter.Data.Context;
 using ShopCenter.Domain.Interfaces;
 using ShopCenter.Domain.Models.User;
+using ShopCenter.Domain.ViewModels.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,17 @@ namespace ShopCenter.Data.Repository
             _dbContext = dBContext;
         }
 
-        public  void AddUser(User user)
+        public void AddUser(User user)
         {
+            if (user.RoleId == 0)
+            {
+                user.RoleId = _dbContext.Roles.Single(r => r.IsDefaultForNewUsers).Id;
+            }
+            
             _dbContext.Users.Add(user);
         }
 
-        public void Save()
+        public  void Save()
         {
             _dbContext.SaveChanges();
         }
@@ -65,6 +71,39 @@ namespace ShopCenter.Data.Repository
         public  User GetUserInformation(string EmailOrPhoneNumber)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Email == EmailOrPhoneNumber || u.PhoneNumber == EmailOrPhoneNumber);
+        }
+
+        public async Task<List<UsersListViewModel>> GetAllUsers()
+        {
+            return await _dbContext.Users.Where(u => !u.IsDelete).Select(u => new UsersListViewModel()
+            {
+                UserId = u.Id,
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                FullName=u.FirstName + " " + u.LastName,
+                IsActive=u.IsActive,
+                Role = u.Role
+            }).OrderByDescending(u => u.UserId).ToListAsync();
+        }
+
+        public async Task<User> GetUserById(int id)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+       public User GetUserByIdSynce(int id)
+        {
+            return  _dbContext.Users.FirstOrDefault(u => u.Id == id);
+        }
+
+        public  bool IsExistsEmail(string email)
+        {
+            return  _dbContext.Users.Any(u => u.Email == email);
+        }
+
+        public  bool IsExistsPhoneNumber(string phone)
+        {
+            return  _dbContext.Users.Any(u => u.PhoneNumber == phone);
         }
     }
 }
