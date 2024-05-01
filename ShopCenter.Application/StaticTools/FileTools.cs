@@ -80,10 +80,8 @@ namespace ShopCenter.Application.StaticTools
                 case SiteSections.ContactUs:
                     return [Directory.GetCurrentDirectory(), "wwwroot", "videos", "contactUs", fileName];
 
-                case SiteSections.Product:
-                    return [Directory.GetCurrentDirectory(), "wwwroot", "videos", "product", fileName];
-                case SiteSections.Ticket:
-                    return [Directory.GetCurrentDirectory(), "wwwroot", "videos", "tickets", fileName];
+               
+                   
             }
             return null;
         }

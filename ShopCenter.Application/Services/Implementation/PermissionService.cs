@@ -12,11 +12,13 @@ namespace ShopCenter.Application.Services.Implementation
 {
     public class PermissionService: IPermissionService
     {
+        #region Ctor
         private IPermissionRepository _permissionRepository;
         public PermissionService(IPermissionRepository permissionRepository)
         {
             _permissionRepository = permissionRepository;
         }
+        #endregion
 
         public async Task<List<Role>> GetAllRoles()
         {

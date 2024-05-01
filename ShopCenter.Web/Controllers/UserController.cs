@@ -17,7 +17,7 @@ namespace ShopCenter.Web.Controllers
 {
     public class UserController : Controller
     {
-        #region IoC
+        #region Ctor
         private IUserServices _userServices;
         private IViewRenderService _viewRenderService;
         public UserController(IUserServices userServices, IViewRenderService viewRenderService)
@@ -127,6 +127,7 @@ namespace ShopCenter.Web.Controllers
                 return View(login);
             }
             var email = TempData["Email"] as string;
+            TempData.Keep("Email");
             var user = await _userServices.IsExistUserForLogin(email, login);
             if (user != null)
             {
@@ -180,6 +181,7 @@ namespace ShopCenter.Web.Controllers
             var phone = TempData["PhoneNumber"] as string;
             TempData.Keep("PhoneNumber");
             var user = await _userServices.GetUserByPhoneNumber(phone);
+            ViewBag.IsExistUser = user;
             var verificationCode = (int)TempData["VerificationCode"];
             TempData.Keep("VerificationCode");
             if (user == null)
@@ -191,8 +193,10 @@ namespace ShopCenter.Web.Controllers
                     ModelState.AddModelError("VerificationCode", "کد تایید وارد شده صحیح نمی باشد");
                     return View(verification);
                 }
-                _userServices.RegisterUserByPhoneNumber(phone);
-                return Redirect("/UserPanel");
+               await _userServices.RegisterUserByPhoneNumber(phone);
+                var newUser = await _userServices.GetUserByPhoneNumber(phone);
+                user = newUser;
+
             }
 
 
@@ -288,6 +292,7 @@ namespace ShopCenter.Web.Controllers
                 {
                     var body = _viewRenderService.RenderToStringAsync("User/_ResetPasswordEmail", user);
                     SendEmail.Send(user.Email, "بازیابی رمز عبور", body);
+                    ViewBag.EmailSent = true;
                 }
                 else
                 {
@@ -298,7 +303,7 @@ namespace ShopCenter.Web.Controllers
             }
             else
             {
-                if (forgetPasswordVM.EmailOrPhoneNumber.Any(x => char.IsLetter(x)) || forgetPasswordVM.EmailOrPhoneNumber.Length != 10)
+                if (forgetPasswordVM.EmailOrPhoneNumber.Any(x => char.IsLetter(x)) || forgetPasswordVM.EmailOrPhoneNumber.Length != 11)
                 {
                     ModelState.AddModelError("EmailOrPhoneNumber", "لطفا شماره تلفن خود را بصورت صحیح وارد کنید");
                     return View(forgetPasswordVM);
@@ -306,8 +311,19 @@ namespace ShopCenter.Web.Controllers
                 var user = await _userServices.GetUserByPhoneNumber(forgetPasswordVM.EmailOrPhoneNumber);
                 if (user != null)
                 {
-                    var body = _viewRenderService.RenderToStringAsync("User/_ResetPasswordEmail", user);
-                    SendEmail.Send(user.Email, "بازیابی رمز عبور", body);
+
+                    var verificationCode = RandomNumberGenerator.GenerateRendomInteger(10000, 99999);
+                    var isMessageSent = MessageSender.SendMessage(forgetPasswordVM.EmailOrPhoneNumber
+                                          , "به شاپ سنتر خوش آمدید برای ورود به حساب کاربری خود کد زیر را وارد کنید:" + verificationCode);
+
+                    if (!isMessageSent)
+                    {
+                        ViewBag.MessageDoesntSend = true;
+                        return View();
+                    }
+                    TempData["VerificationCode"] = verificationCode;
+                    TempData["PhoneNumber"] = forgetPasswordVM.EmailOrPhoneNumber;
+                    return RedirectToAction("Verification");
 
                 }
                 else
@@ -316,7 +332,7 @@ namespace ShopCenter.Web.Controllers
                     return View(forgetPasswordVM);
                 }
             }
-            ViewBag.EmailSent = true;
+           
             return View();
         }
 

@@ -13,10 +13,19 @@ namespace ShopCenter.Data.Repository
 {
     public class UserRepository : IUserRepository
     {
+        #region Ctor
         private ShopCenterDBContext _dbContext;
         public UserRepository(ShopCenterDBContext dBContext)
         {
             _dbContext = dBContext;
+        }
+        #endregion
+
+        #region Crud
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
 
         public void AddUser(User user)
@@ -25,15 +34,18 @@ namespace ShopCenter.Data.Repository
             {
                 user.RoleId = _dbContext.Roles.Single(r => r.IsDefaultForNewUsers).Id;
             }
-            
+
             _dbContext.Users.Add(user);
         }
 
-        public  void Save()
+        public void UpdateUser(User user)
         {
-            _dbContext.SaveChanges();
+            _dbContext.Users.Update(user);
         }
 
+        #endregion
+
+        #region Utility
         public async Task<User> GetUserByEmail(string email)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
@@ -48,11 +60,29 @@ namespace ShopCenter.Data.Repository
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
         }
 
-        public void UpdateUser(User user)
+        public async Task<User> GetUserById(int id)
         {
-            _dbContext.Users.Update(user);
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public User GetUserByIdSynce(int id)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.Id == id);
+        }
+
+        public bool IsExistsEmail(string email)
+        {
+            return _dbContext.Users.Any(u => u.Email == email);
+        }
+
+        public bool IsExistsPhoneNumber(string phone)
+        {
+            return _dbContext.Users.Any(u => u.PhoneNumber == phone);
+        }
+
+        #endregion
+
+        #region UserPanel
         public async Task<User> IsExistUserForLoginByEmail(string email, string password)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
@@ -65,14 +95,17 @@ namespace ShopCenter.Data.Repository
 
         public async Task<bool> IsExistUserByActivationCode(string activationCode)
         {
-            return await _dbContext.Users.AnyAsync(u => u.ActivationCode == activationCode); 
+            return await _dbContext.Users.AnyAsync(u => u.ActivationCode == activationCode);
         }
 
-        public  User GetUserInformation(string EmailOrPhoneNumber)
+        public User GetUserInformation(string EmailOrPhoneNumber)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Email == EmailOrPhoneNumber || u.PhoneNumber == EmailOrPhoneNumber);
         }
 
+        #endregion
+
+        #region Admin
         public async Task<List<UsersListViewModel>> GetAllUsers()
         {
             return await _dbContext.Users.Where(u => !u.IsDelete).Select(u => new UsersListViewModel()
@@ -80,30 +113,13 @@ namespace ShopCenter.Data.Repository
                 UserId = u.Id,
                 Email = u.Email,
                 PhoneNumber = u.PhoneNumber,
-                FullName=u.FirstName + " " + u.LastName,
-                IsActive=u.IsActive,
+                FullName = u.FirstName + " " + u.LastName,
+                IsActive = u.IsActive,
                 Role = u.Role
             }).OrderByDescending(u => u.UserId).ToListAsync();
         }
 
-        public async Task<User> GetUserById(int id)
-        {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-        }
+        #endregion
 
-       public User GetUserByIdSynce(int id)
-        {
-            return  _dbContext.Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        public  bool IsExistsEmail(string email)
-        {
-            return  _dbContext.Users.Any(u => u.Email == email);
-        }
-
-        public  bool IsExistsPhoneNumber(string phone)
-        {
-            return  _dbContext.Users.Any(u => u.PhoneNumber == phone);
-        }
     }
 }

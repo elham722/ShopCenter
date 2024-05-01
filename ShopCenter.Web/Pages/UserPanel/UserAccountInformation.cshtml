@@ -1,4 +1,5 @@
 ﻿@page "{handler?}"
+@using PersianDate.Standard
 @using ShopCenter.Application.Convertors
 @model ShopCenter.Web.Pages.UserPanel.UserAccountInformationModel
 @{
@@ -86,7 +87,7 @@
                                         <div class="fs-7 fw-bold text-dark">تاریخ تولد</div>
                                         <button class="btn btn-circle btn-outline-light" data-remodal-target="personal-info-birth-modal"><i class="ri-ball-pen-fill"></i></button>
                                     </div>
-                                    <div id="birthDateInp" class="fs-6 fw-bold text-muted">@Model.UserInformationsVM?.BirthDate?.ToShamsi().Split('/')</div>
+                                    <div id="birthDateInp" class="fs-6 fw-bold text-muted">@Model.UserInformationsVM?.BirthDate?.ToFa("d MMM yyyy")</div>
                                 </div>
                             </div>
                             @*<div class="col-lg-6 mb-3">

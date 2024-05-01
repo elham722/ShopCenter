@@ -43,7 +43,7 @@ namespace ShopCenter.Web.Pages.UserPanel
             UserInformationsVM = _userServices.GetUserInformationsForShow(User.Identity!.Name!);
             
         }
-        //*******************
+      
 
         public void SignInUserAgain(User user, bool byEmail = false)
         {
@@ -80,7 +80,6 @@ namespace ShopCenter.Web.Pages.UserPanel
             HttpContext.SignInAsync(principal, properties);
         }
 
-        //*******************
         public IActionResult OnPostConfirmUserFullName()
         {
             var firstNameValidation = ModelState.GetFieldValidationState("UserFullNameVm.FirstName");

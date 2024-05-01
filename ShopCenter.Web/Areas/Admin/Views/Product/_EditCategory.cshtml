@@ -1,0 +1,142 @@
+﻿@using ShopCenter.Domain.Models.Product
+@model EditCategoryViewModel
+@{
+    List<Category> categories = ViewData["MainCategories"] as List<Category>;
+    List<Category> subCategories = ViewData["SubCategories"] as List<Category>;
+}
+<div class="modal-body">
+    <div class="modal-header text-align-center">
+
+        <h3>ویرایش دسته بندی</h3>
+
+
+    </div>
+    <br />
+    <form id="frmEditCategory" method="post" enctype="multipart/form-data" asp-action="SubmitEditCategory" asp-controller="Product" data-ajax="true" data-ajax-begin="StartLoading()" data-ajax-success="EditCategory">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <input asp-for="Id" type="hidden" />
+                    <label class="control-label">عنوان دسته بندی</label>
+                    <input asp-for="CategoryTitle" type="text" placeholder="@Model.CategoryTitle" class="form-control m-t-10" />
+                    <span asp-validation-for="CategoryTitle" class="text-danger"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="control-label">توضیحات </label>
+                    <textarea asp-for="Description" class="form-control m-t-10" rows="3" placeholder="@Model.Description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">انتخاب تصویر </label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <span class="btn btn-azure btn-file">
+                                انتخاب <input type="file" accept="image/*" multiple="" asp-for="ImageUrl" id="ImageUrl">
+                            </span>
+                        </span>
+                        <input type="text" class="form-control" readonly="">
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+                <div class="m-t-15">
+                    <div style="border:1px solid gray" class="form-control">
+                        <p style="font-size:large">تصویر دسته بندی</p>
+                    </div>
+                    <div>
+                        @if (Model.ImageName == null)
+                        {
+                            <img id="imgCategory"  class="img img-thumbnail" src="/Admin/img/Category/default.jpg" alt="ImageUrl" style="width:100%;height:100%;object-fit:cover" asp-append-version=true />
+
+                        }
+                        else
+                        {
+                            <input asp-for="ImageName" type="hidden" />
+                            <img id="imgCategory"  class="img img-thumbnail" src="/Admin/img/Category/@Model.ImageName" alt="ImageUrl" style="width:100%;height:100%;object-fit:cover" asp-append-version=true />
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+
+
+      
+
+        @if (Model.ParentId != null)
+        {
+            <div class="form-title">
+                دسته بندی اصلی
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    @if (Model.GrandParentId == null)
+                    {
+                    <div class="form-group">
+                       
+                            <label class="control-label"> دسته بندی اصلی </label>
+                            <select asp-for="GrandParentId" class="form-control m-t-10" name="GrandParentId">
+                                <option value="@Model.ParentId"> دسته بندی اصلی فعلی :  @Model.FirstCategoryParentTitleName</option>
+                                @foreach (var category in categories)
+                                {
+                                    <option value="@category.Id">@category.CategoryTitle</option>
+                                }
+                            </select>
+                    </div>
+                    }
+                    @if (Model.GrandParentId != null)
+                    {
+                        <div class="form-group">
+
+                            <label class="control-label"> دسته بندی اصلی </label>
+                            <select asp-for="GrandParentId" class="form-control m-t-10" name="GrandParentId">
+                                <option value="@Model.GrandParentId">   @Model.GrandCategoryTitleName</option>
+                               
+                            </select>
+                        </div>
+                     
+                    <div class="form-group">
+                       
+                            <label class="control-label"> دسته بندی سطح دوم </label>
+                            <select asp-for="ParentId" class="form-control m-t-10" name="ParentId">
+                                <option value="@Model.ParentId">   دسته بندی فعلی  :  @Model.FirstCategoryParentTitleName</option>
+                                @foreach (var category in subCategories)
+                                {
+                                    <option value="@category.Id">@category.CategoryTitle</option>
+                                }
+                            </select>
+                       
+                    </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="form-title">
+        </div>
+        <br />
+        <br />
+        <div>
+            <input class="btn btn-palegreen" type="button" value="ویرایش" onclick="EditCategory(event)" />
+            <a class="btn btn-danger" data-dismiss="modal">انصراف</a>
+
+        </div>
+    </form>
+</div>
+
+<script>
+    ImageUrl.onchange = evt => {
+        const [file] = ImageUrl.files
+        if (file) {
+            imgCategory.src = URL.createObjectURL(file)
+        }
+    }
+
+</script>

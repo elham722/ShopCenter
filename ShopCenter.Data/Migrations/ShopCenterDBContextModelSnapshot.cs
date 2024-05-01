@@ -22,6 +22,89 @@ namespace ShopCenter.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ShopCenter.Domain.Models.Product.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ShopCenter.Domain.Models.Product.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("QuantityInStock")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Visible")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("ShopCenter.Domain.Models.User.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -52,7 +135,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8709),
+                            CreateDate = new DateTime(2024, 4, 25, 15, 23, 52, 997, DateTimeKind.Local).AddTicks(8307),
                             IsDefaultForNewUsers = false,
                             IsDelete = false,
                             RoleTiltle = "مدیر سایت"
@@ -60,7 +143,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8724),
+                            CreateDate = new DateTime(2024, 4, 25, 15, 23, 52, 997, DateTimeKind.Local).AddTicks(8320),
                             IsDefaultForNewUsers = false,
                             IsDelete = false,
                             RoleTiltle = "دستیار مدیر"
@@ -68,7 +151,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2024, 4, 18, 22, 15, 5, 515, DateTimeKind.Local).AddTicks(8725),
+                            CreateDate = new DateTime(2024, 4, 25, 15, 23, 52, 997, DateTimeKind.Local).AddTicks(8322),
                             IsDefaultForNewUsers = true,
                             IsDelete = false,
                             RoleTiltle = "کاربر عادی"
@@ -143,6 +226,27 @@ namespace ShopCenter.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ShopCenter.Domain.Models.Product.Category", b =>
+                {
+                    b.HasOne("ShopCenter.Domain.Models.Product.Category", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("ShopCenter.Domain.Models.Product.Product", b =>
+                {
+                    b.HasOne("ShopCenter.Domain.Models.Product.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("ShopCenter.Domain.Models.User.User", b =>
                 {
                     b.HasOne("ShopCenter.Domain.Models.User.Role", "Role")
@@ -152,6 +256,11 @@ namespace ShopCenter.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ShopCenter.Domain.Models.Product.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ShopCenter.Domain.Models.User.Role", b =>

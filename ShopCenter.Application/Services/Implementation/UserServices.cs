@@ -23,6 +23,8 @@ namespace ShopCenter.Application.Services.Implementation
 {
     public class UserServices : IUserServices
     {
+        #region Ctor
+
         private IUserRepository _userRepository;
         private IViewRenderService _viewRenderService;
         public UserServices(IUserRepository userRepository, IViewRenderService viewRenderService)
@@ -30,43 +32,27 @@ namespace ShopCenter.Application.Services.Implementation
             _userRepository = userRepository;
             _viewRenderService = viewRenderService;
         }
+        #endregion
 
-        public async Task<bool> ActiveUserAccount(string activeCode)
-        {
-            var user = await _userRepository.UserWithActiveCode(activeCode);
-            if (user == null || user.IsActive)
-                return false;
-
-            user.IsActive = true;
-            user.ActivationCode = NameGenerator.GenerateUniqName();
-            _userRepository.Save();
-            return true;
-        }
-
+        #region Utility
         public async Task<User> GetUserByEmail(string email)
         {
             return await _userRepository.GetUserByEmail(email);
         }
-       
+
         public async Task<User> GetUserByPhoneNumber(string phone)
         {
             return await _userRepository.GetUserByPhoneNumber(phone);
         }
 
-        public async Task<bool> IsExistUserByActivationCode(string activationCode)
+        public User GetUserByEmailSync(string email)
         {
-            return await _userRepository.IsExistUserByActivationCode(activationCode);
+            return _userRepository.GetUserByEmailSynce(email);
         }
 
-        public async Task<User> IsExistUserForLogin(string email, LoginViewModel login)
-        {
-            var hashpassword = PasswordHasher.HashPasswordMD5(login.Password);
-            var emailfix = EmailConvertor.FixEmail(email);
-            var user = await _userRepository.IsExistUserForLoginByEmail(emailfix, hashpassword);
-            return user;
+        #endregion
 
-        }
-
+        #region RegisterUser
         public void RegisterUser(string email, RegisterViewModel register)
         {
             var user = new User()
@@ -90,7 +76,7 @@ namespace ShopCenter.Application.Services.Implementation
 
         }
 
-        public void RegisterUserByPhoneNumber(string phone)
+        public async Task<User> RegisterUserByPhoneNumber(string phone)
         {
             var user = new User()
             {
@@ -103,12 +89,48 @@ namespace ShopCenter.Application.Services.Implementation
             };
             _userRepository.AddUser(user);
             _userRepository.Save();
+            return user;
         }
 
-        
-        public async Task<bool> ResetUserPassword(string activeCode,ResetPasswordViewModel resetPassword)
+        #endregion
+
+        #region LoginUser
+        public async Task<User> IsExistUserForLogin(string email, LoginViewModel login)
         {
-            User user=await _userRepository.UserWithActiveCode(activeCode);
+            var hashpassword = PasswordHasher.HashPasswordMD5(login.Password);
+            var emailfix = EmailConvertor.FixEmail(email);
+            var user = await _userRepository.IsExistUserForLoginByEmail(emailfix, hashpassword);
+            return user;
+
+        }
+
+
+        #endregion
+
+        #region ActiveAccount
+        public async Task<bool> ActiveUserAccount(string activeCode)
+        {
+            var user = await _userRepository.UserWithActiveCode(activeCode);
+            if (user == null || user.IsActive)
+                return false;
+
+            user.IsActive = true;
+            user.ActivationCode = NameGenerator.GenerateUniqName();
+            _userRepository.Save();
+            return true;
+        }
+
+        #endregion
+
+        #region RessetPassword
+        public async Task<bool> IsExistUserByActivationCode(string activationCode)
+        {
+            return await _userRepository.IsExistUserByActivationCode(activationCode);
+        }
+
+        public async Task<bool> ResetUserPassword(string activeCode, ResetPasswordViewModel resetPassword)
+        {
+            User user = await _userRepository.UserWithActiveCode(activeCode);
             if (user == null)
             {
                 return false;
@@ -123,20 +145,24 @@ namespace ShopCenter.Application.Services.Implementation
             return true;
         }
 
+        #endregion
+
+        #region UserPanel
+
         public UserInformationsViewModel GetUserInformationsForShow(string emailOrPhoneNumber)
         {
             var user = _userRepository.GetUserInformation(emailOrPhoneNumber);
             if (user != null)
             {
-                var newUserVM= new UserInformationsViewModel()
+                var newUserVM = new UserInformationsViewModel()
                 {
-                    Email=user.Email,
-                    PhoneNumber=user.PhoneNumber,
-                    BirthDate=user.BirthDate,
-                    FirstName=user.FirstName,
-                    LastName=user.LastName,
-                    NationalNumber=user.NationalNumber,
-                    
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    BirthDate = user.BirthDate,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    NationalNumber = user.NationalNumber,
+
                 };
                 return newUserVM;
             }
@@ -168,7 +194,7 @@ namespace ShopCenter.Application.Services.Implementation
             {
                 user.BirthDate = DateTime.Parse(birthDate);
             }
-        
+
             _userRepository.Save();
             return user;
         }
@@ -177,26 +203,25 @@ namespace ShopCenter.Application.Services.Implementation
         {
             var user = _userRepository.GetUserInformation(emailOrPhoneNumber);
             user.Password = PasswordHasher.HashPasswordMD5(password);
-         
+
             _userRepository.Save();
         }
 
-        public User GetUserByEmailSync(string email)
-        {
-            return _userRepository.GetUserByEmailSynce(email);
-        }
 
+        #endregion
+
+        #region Admin
 
         public async Task<List<UsersListViewModel>> GetUsersList()
         {
-            List<UsersListViewModel> users= await _userRepository.GetAllUsers();
+            List<UsersListViewModel> users = await _userRepository.GetAllUsers();
             return users;
         }
 
-     
+
         public async Task<bool> DeleteUser(int UserId)
         {
-            User user =await _userRepository.GetUserById(UserId);
+            User user = await _userRepository.GetUserById(UserId);
             if (user == null)
             {
                 return false;
@@ -249,21 +274,25 @@ namespace ShopCenter.Application.Services.Implementation
                 {
                     return AddOrEditUserByAdminResult.ImageSizeInvalid;
                 }
-                if (user.AvatarName != null && user.AvatarName != "Default.png") { ImageTools.DeleteImageFromHard(user.AvatarName, "user"); }
+
+                if (user.AvatarName != null && user.AvatarName != "Default.png")
+                {
+                    ImageTools.DeleteImageFromHard(user.AvatarName, "user");
+                }
                 string avatar = null;
                 ImageTools.AddImageToHard(user.UserAvatar, NameGenerator.GenerateUniqName().ToString(), "user", out avatar);
                 user.AvatarName = avatar;
                 exituser.AvatarName = user.AvatarName;
             }
-            else
+            else if (user.AvatarName != exituser.AvatarName)
             {
                 exituser.AvatarName = "Default.png";
             }
 
-            if(user.Password != null)
+            if (user.Password != null)
             {
                 exituser.Password = PasswordHasher.HashPasswordMD5(user.Password);
-               
+
             }
             exituser.Id = user.UserId;
             exituser.RoleId = roleId;
@@ -291,17 +320,18 @@ namespace ShopCenter.Application.Services.Implementation
         }
         public AddOrEditUserByAdminResult AddUserByAdmin(CreateUserViewModel newUser, int roleId)
         {
-            
-            if ( _userRepository.IsExistsEmail(newUser.Email))
+
+            if (_userRepository.IsExistsEmail(newUser.Email))
             {
                 return AddOrEditUserByAdminResult.DuplicateEmail;
             }
-            if(newUser.PhoneNumber != null) { 
-
-            if ( _userRepository.IsExistsPhoneNumber(newUser.PhoneNumber))
+            if (newUser.PhoneNumber != null)
             {
-                return AddOrEditUserByAdminResult.DuplicatePhoneNumber;
-            }
+
+                if (_userRepository.IsExistsPhoneNumber(newUser.PhoneNumber))
+                {
+                    return AddOrEditUserByAdminResult.DuplicatePhoneNumber;
+                }
             }
             string avatar;
             if (newUser.UserAvatar != null)
@@ -320,21 +350,21 @@ namespace ShopCenter.Application.Services.Implementation
             {
                 avatar = "Default.png";
             }
-          
+
             var ouser = new User()
             {
-                RoleId= roleId,
+                RoleId = roleId,
                 Email = EmailConvertor.FixEmail(newUser.Email),
                 Password = PasswordHasher.HashPasswordMD5(newUser.Password),
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-              MessageCode= RandomNumberGenerator.GenerateRendomInteger(10000, 99999),
+                MessageCode = RandomNumberGenerator.GenerateRendomInteger(10000, 99999),
                 PhoneNumber = newUser.PhoneNumber,
                 AvatarName = avatar,
                 IsActive = newUser.IsActive,
                 ActivationCode = NameGenerator.GenerateUniqName(),
             };
-  
+
             if (newUser.CreateActivationCode)
             {
                 ouser.ActivationCode = NameGenerator.GenerateUniqName();
@@ -346,7 +376,7 @@ namespace ShopCenter.Application.Services.Implementation
             }
 
             _userRepository.AddUser(ouser);
-             _userRepository.Save();
+            _userRepository.Save();
             return AddOrEditUserByAdminResult.Done;
         }
 
@@ -359,11 +389,11 @@ namespace ShopCenter.Application.Services.Implementation
             }
             var detail = new DetailsUserViewModel()
             {
-                AvatarName= user.AvatarName,
+                AvatarName = user.AvatarName,
                 UserId = UserId,
                 BirthDate = user.BirthDate,
                 Email = user.Email,
-                FullName =user.FirstName+ " " +user.LastName,
+                FullName = user.FirstName + " " + user.LastName,
                 NationalNumber = user.NationalNumber,
                 PhoneNumber = user.PhoneNumber,
                 RegisterDate = user.CreateDate
@@ -382,15 +412,18 @@ namespace ShopCenter.Application.Services.Implementation
             {
                 UserId = user.Id,
                 FirstName = user.FirstName,
-                LastName = user.LastName, 
+                LastName = user.LastName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                IsActive=user.IsActive,
-                RoleId=user.RoleId,
-                Password=user.Password,
+                IsActive = user.IsActive,
+                RoleId = user.RoleId,
+                Password = user.Password,
                 AvatarName = user.AvatarName,
             };
             return detail;
         }
+
+        #endregion
+
     }
 }

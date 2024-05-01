@@ -26,7 +26,7 @@ namespace ShopCenter.Core.Senders
 
             SmtpServer.Port = 587;
             SmtpServer.UseDefaultCredentials = false;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("shopcenteremail@gmail.com", "");
+            SmtpServer.Credentials = new System.Net.NetworkCredential("shopcenteremail@gmail.com", "wvvscjzfthubqmnl");
             SmtpServer.EnableSsl = true;
             SmtpServer.Send(mail);
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ShopCenter.Domain.Models.Product;
 using ShopCenter.Domain.Models.User;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace ShopCenter.Data.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+       
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

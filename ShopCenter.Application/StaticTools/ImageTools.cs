@@ -55,9 +55,10 @@ namespace ShopCenter.Application.StaticTools
             {
                 case "user":
                   return [Directory.GetCurrentDirectory(), "wwwroot", "assets", "images", "avatar", fileName];
+                case "category":
+                    return [Directory.GetCurrentDirectory(), "wwwroot", "Admin", "img", "Category", fileName];
 
-              
-               
+
             }
             return null;
             

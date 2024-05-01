@@ -12,11 +12,14 @@ namespace ShopCenter.Data.Repository
 {
     public class PermissionRepository :IPermissionRepository
     {
+        #region Ctor
         private ShopCenterDBContext _dbContext;
         public PermissionRepository(ShopCenterDBContext dBContext)
         {
             _dbContext = dBContext;
         }
+        #endregion
+
         public async Task<List<Role>> GetAllRoles()
         {
             return await _dbContext.Roles.ToListAsync();

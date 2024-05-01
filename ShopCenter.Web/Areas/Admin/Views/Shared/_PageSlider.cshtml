@@ -32,7 +32,27 @@
                
             </ul>
         </li>
-     
+        <li>
+            <a href="#" class="menu-dropdown">
+                <span class="menu-icon glyphicon glyphicon-briefcase"></span>
+                <span class="menu-text"> مدیریت محصولات </span>
+                <i class="menu-expand"></i>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a asp-area="Admin" asp-action="GetAllCategories" asp-controller="Product">
+                        <span class="menu-text"> دسته بندی </span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="Admin">
+                        <span class="menu-text">   محصولات</span>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
     </ul>
     
 </div>

@@ -98,6 +98,32 @@ namespace ShopCenter.Domain.Models.Common
 
         }
 
+        public enum AddCategoryResult
+        {
+          
+            [Display(Name = "حجم عکس  باید کمتر از 2 مگا بایت باشد")]
+            ImageSizeInvalid,
+            [Display(Name = "پسوند عکس نامعتبر است")]
+            ImageExensionInvalid,
+            [Display(Name = "دسته بندی با موفقیت ثبت شد")]
+            Done
+            
+
+        }
+
+        public enum EditCategoryResult
+        {
+
+            [Display(Name = "حجم عکس  باید کمتر از 2 مگا بایت باشد")]
+            ImageSizeInvalid,
+            [Display(Name = "پسوند عکس نامعتبر است")]
+            ImageExensionInvalid,
+            [Display(Name = "دسته بندی با موفقیت ثبت شد")]
+            Done
+
+
+        }
+
         public enum AddContactUsReturns
         {
     

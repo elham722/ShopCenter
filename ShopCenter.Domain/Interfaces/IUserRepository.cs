@@ -10,20 +10,35 @@ namespace ShopCenter.Domain.Interfaces
 {
     public interface IUserRepository
     {
-        void AddUser(User user);
+
+        #region Crud
         void Save();
 
+        void AddUser(User user);
+
         void UpdateUser(User user);
+        #endregion
+
+        #region Utility
 
         Task<User> GetUserById(int id);
+
         User GetUserByIdSynce(int id);
 
-        Task<User> IsExistUserForLoginByEmail(string email, string password);
+        bool IsExistsEmail(string email);
+
+        bool IsExistsPhoneNumber(string phone);
 
         Task<User> GetUserByEmail(string email);
+
         User GetUserByEmailSynce(string email);
 
         Task<User> GetUserByPhoneNumber(string phone);
+        #endregion
+
+        #region UserPanel
+
+        Task<User> IsExistUserForLoginByEmail(string email, string password);
 
         Task<User> UserWithActiveCode(string activeCode);
 
@@ -31,11 +46,13 @@ namespace ShopCenter.Domain.Interfaces
 
         User GetUserInformation(string EmailOrPhoneNumber);
 
+        #endregion
+
+        #region Admin
 
         Task<List<UsersListViewModel>> GetAllUsers();
 
-        bool IsExistsEmail(string email);
+        #endregion
 
-        bool IsExistsPhoneNumber(string phone);
     }
 }

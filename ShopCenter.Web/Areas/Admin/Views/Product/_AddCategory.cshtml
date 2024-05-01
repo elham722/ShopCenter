@@ -1,0 +1,104 @@
+﻿@using ShopCenter.Domain.Models.Product
+@model AddNewCategoryViewModel
+@{
+    List<Category> categories = ViewData["MainCategories"] as List<Category>;
+   
+}
+
+<div class="modal-body">
+    <div class="modal-header text-align-center">
+        <h3>افزودن دسته بندی جدید</h3>
+    </div>
+    <br />
+    <form id="frmNewCategory" method="post" enctype="multipart/form-data" asp-action="SubmitAddNewCategory" asp-controller="Product" data-ajax="true" data-ajax-begin="StartLoading()" data-ajax-success="addCategory">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label class="control-label">عنوان دسته بندی</label>
+                    <input asp-for="CategoryTitle" type="text" placeholder="" class="form-control m-t-10" />
+                    <span asp-validation-for="CategoryTitle" class="text-danger"></span>
+                </div>
+
+              
+                <div class="form-group">
+                    <label class="control-label">توضیحات </label>
+                    <textarea asp-for="Description" class="form-control m-t-10" rows="3" placeholder="توضیحات را وارد کنید..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">انتخاب تصویر </label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-azure btn-file">
+                                    انتخاب <input type="file" accept="image/*" multiple=""  asp-for="ImageUrl" id="ImageUrl">
+                                </span>
+                            </span>
+                        <input  type="text" class="form-control" readonly="">
+                        </div>
+                </div>
+                
+
+            </div>
+            <div class="col-md-4">
+                <div class="m-t-15">
+                    <div style="border:1px solid gray" class="form-control">
+                        <p style="font-size:large">تصویر دسته بندی</p>
+                    </div>
+                    <div>
+                        <img id="imgCategory" class="img img-thumbnail" src="/Admin/img/Category/default.jpg"  alt="ImageUrl" style="width:100%;height:100%;object-fit:cover" asp-append-version=true />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        
+
+        <div class="form-title">
+            افزودن دسته بندی اصلی
+        </div>
+      
+
+        <div class="row">
+            <div class="col-md-8">
+        <div class="form-group">
+            <label class="control-label">انتخاب دسته بندی اصلی </label>
+                    <select asp-for="ParentId" class="form-control m-t-10" name="ParentId">
+                        <option value="">انتخاب دسته بندی اصلی</option>
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category.Id">@category.CategoryTitle</option>
+                        }
+                    </select>
+
+        </div>
+
+        </div>
+        </div>
+        <div class="form-title">
+            <p class="help-block">
+                <span class="text-danger">*</span>  در صورت وارد نکردن دسته بندی اصلی , دسته بندی وارد شده به عنوان دسته بندی اصلی اضافه می شود.
+
+            </p>
+        </div>
+        <br />
+        <br />
+        <div>
+            <input class="btn btn-palegreen" type="button" value="افزودن" onclick="addCategory(event)" />
+            <a class="btn btn-danger" data-dismiss="modal">انصراف</a>
+          
+        </div>
+    </form>
+</div>
+
+<script>
+    ImageUrl.onchange = evt => {
+        const [file] = ImageUrl.files
+        if (file) {
+            imgCategory.src = URL.createObjectURL(file)
+        }
+    }
+
+</script>

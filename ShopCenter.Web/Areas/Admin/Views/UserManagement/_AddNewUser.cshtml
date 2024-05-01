@@ -9,7 +9,7 @@
         <h3>افزودن کاربر جدید</h3>
     </div>
     <hr />
-    <form id="frmCreateUser" method="post" enctype="multipart/form-data" asp-action="SubmitCreateUser" asp-controller="UserManagement" data-ajax="true" data-ajax-begin="StartLoading()" data-ajax-success="AddUserSubmitedFormSubmited">
+    <form id="frmCreateUser" method="post" enctype="multipart/form-data" asp-action="SubmitCreateUser" asp-controller="UserManagement" data-ajax="true" data-ajax-begin="StartLoading()" data-ajax-success="addUser">
         <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="form-group">
-                <input asp-for="Email" type="text" placeholder="ایمیل" class="form-control m-t-10" />
+                <input asp-for="Email" type="text" id="Email" placeholder="ایمیل" class="form-control m-t-10" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
                 <div class="form-group">
@@ -31,7 +31,7 @@
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                <input asp-for="Password" type="password" placeholder="کلمه عبور" class="form-control m-t-10" />
+                <input asp-for="Password" type="password" id="Password" placeholder="کلمه عبور" class="form-control m-t-10" />
                 <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -93,7 +93,7 @@
         </div>
         <hr />
         <div>
-            <input type="submit" id="uploadBtn" class="btn btn-success" value="افزودن کاربر جدید" />
+            <input type="button" id="uploadBtn" class="btn btn-success" value="افزودن کاربر جدید" onclick="addUser(event)" />
             <a class="btn btn-danger" data-dismiss="modal">انصراف</a>
         </div>
     </form> 

@@ -59,6 +59,7 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
         [HttpPost("submitaddusermodal")]
         public IActionResult SubmitCreateUser(int roleId, CreateUserViewModel newUser)
         {
+           
             var resultRoleId = _permissionService.IsExistRoleById(roleId);
             if (resultRoleId)
             {
@@ -137,7 +138,6 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
 
         #endregion
 
-
         #region DetailsUser
 
         [HttpGet("Details")]
@@ -148,7 +148,6 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
         }
 
         #endregion
-
 
         #region DeleteUser
 
@@ -168,9 +167,5 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
 
     #endregion
 
-    #region SearchUser
-   
 
-
-    #endregion
 }
