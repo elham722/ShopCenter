@@ -57,6 +57,8 @@ namespace ShopCenter.Application.StaticTools
                   return [Directory.GetCurrentDirectory(), "wwwroot", "assets", "images", "avatar", fileName];
                 case "category":
                     return [Directory.GetCurrentDirectory(), "wwwroot", "Admin", "img", "Category", fileName];
+                case "aboutus":
+                    return [Directory.GetCurrentDirectory(), "wwwroot", "Admin", "img", "AboutUs", fileName];
 
 
             }

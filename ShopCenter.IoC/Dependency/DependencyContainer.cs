@@ -21,6 +21,7 @@ namespace ShopCenter.IoC.Dependency
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IPermissionRepository,PermissionRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IAboutUsRepository, AboutUsRepository>();
             #endregion
 
 
@@ -29,6 +30,7 @@ namespace ShopCenter.IoC.Dependency
             services.AddScoped<IUserServices,UserServices>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IProductServices, ProductServices>();
+            services.AddScoped<IAboutUsServices, AboutUsServices>();
             #endregion
 
         }
