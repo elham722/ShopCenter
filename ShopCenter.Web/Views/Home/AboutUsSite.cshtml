@@ -1,0 +1,35 @@
+﻿@model AboutUsViewModel
+@{
+    ViewData["Title"] = "درباره ما";
+}
+<br />
+<div class="container">
+<div class="row">
+  <div class="col-xl-9 col-lg-8 mb-lg-0 mb-4">
+      
+        <div class="ui-box bg-white payment-methods mb-5">
+            <h5 class="text-align-center text-danger">@Model.Title</h5>
+            <hr />
+            <div class="ui-box-content">
+             <p>@Model.Description</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-4">
+       <div class="ui-sticky ui-sticky-top">
+            <div class="checkout-bill ui-box bg-white mb-5">
+                <div class="banner-container border-5">
+                        <img class="banner-image" src="/Admin/img/AboutUs/@Model.ImageName" />
+            
+            <br />
+                        <br />
+                    <iframe asp-for="Location" class="banner-image " src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1925.4668752090531!2d51.59704494414625!3d35.74499423817046!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8e1de181637663%3A0xb607d67406d00613!2sTehran%20Province%2C%20Tehran%2C%20Behesht%20St%2C%20PHVW%2BQMM%2C%20Iran!5e0!3m2!1sen!2sus!4v1714645988458!5m2!1sen!2sus" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+          
+        </div>
+           
+    </div>
+</div>
+</div>
+

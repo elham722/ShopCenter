@@ -15,14 +15,14 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
         }
         #endregion
 
-        [Route("aboutUs")]
+        [HttpGet("aboutusadmin")]
         public async  Task<IActionResult> Index()
         {
             AboutUsViewModel aboutUs = await _aboutUsServices.GetAboutUs();
             return View(aboutUs);
         }
 
-        [HttpPost("aboutUs")]
+        [HttpPost("aboutusadmin")]
         public async Task<IActionResult> Index(AboutUsViewModel about)
         {
             if (!ModelState.IsValid)
