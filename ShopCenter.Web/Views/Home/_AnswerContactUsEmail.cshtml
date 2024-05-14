@@ -4,18 +4,18 @@
 @model ContactUsAnswerEmailViewModel
 <div dir="rtl">
 
-<p>کاربر عزیز سلام </p>
+    <p>کاربر عزیز سلام </p>
     <p>شما در تاریخ @Model.CreatDateTime.ToFa("d MMM yyyy") برای ما پیامی با موضوع @Model.Subject فرستاده اید</p>
-<br />
-<h3 style="color:darkviolet"> پیام شما : </h3>
-<p>
-    @Model.Massage
-</p>
-<br />
-<hr />
-<h3 style="color:darkviolet"> پاسخ ما : </h3>
-<p>
-    @Model.Answer
+    <br />
+    <h3 style="color:darkviolet"> پیام شما : </h3>
+    <p>
+        @Model.Massage
+    </p>
+    <br />
+    <hr />
+    <h3 style="color:darkviolet"> پاسخ ما : </h3>
+    <p>
+        @Model.Answer
 
-</p>
+    </p>
 </div>

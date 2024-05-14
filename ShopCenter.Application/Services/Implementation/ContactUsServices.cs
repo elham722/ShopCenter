@@ -137,7 +137,7 @@ namespace ShopCenter.Application.Services.Implementation
                     Subject = ocontactUs.Subject.GetDisplayName(),
 
                 };
-                string body = _viewRenderService.RenderToStringAsync("Home/_EmailAnswerContactUs", emailModel);
+                string body = _viewRenderService.RenderToStringAsync("Home/_AnswerContactUsEmail", emailModel);
                 SendEmail.Send(ocontactUs.Email, "پاسخ پیام شما با موضوع " + ocontactUs.Subject.GetDisplayName(), body);
                 UpdateContactUs(ocontactUs);
 
