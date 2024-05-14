@@ -1,0 +1,96 @@
+﻿@model ContactUsViewModel
+@{
+    ViewData["Title"] = "تماس با ما";
+}
+
+<!-- start of box => contact-us -->
+<div class="ui-box bg-white">
+    <div class="ui-box-title fs-5 fw-bold">تماس با ما</div>
+      <div class="ui-box-content">
+        <div class="fs-7 text-secondary mb-5">
+            برای پیگیری یا سوال درباره سفارش و ارسال پیام بهتر است از
+            فرم
+            زیر استفاده کنید.
+        </div>
+        <!-- start of contact-us-form -->
+        <form asp-action="ContactUs" method="post" enctype="multipart/form-data" class="contact-us-form">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- start of form-element -->
+                    <div class="form-element-row mb-5">
+                        <label class="label" asp-for="Subject"></label>
+                        <select class="select2" name="subject" asp-for="Subject" asp-items="Html.GetEnumSelectList<ContactUsSubjectTitle>()">
+                    
+                            <option value="-1">انتخاب موضوع</option>
+                           
+                        </select>
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+                <div class="col-md-6">
+                    <!-- start of form-element -->
+                    <div class="form-element-row mb-5">
+                        <label class="label" asp-for="FullName"></label>
+                        <input type="text" class="form-control" asp-for="FullName" placeholder="نام کامل">
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+
+                <div class="col-md-6">
+                    <!-- start of form-element -->
+                    <div class="form-element-row mb-5">
+                        <label class="label" asp-for="Email"></label>
+                        <input type="text" class="form-control" asp-for="Email" placeholder="example@example.com">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+
+                <div class="col-md-6">
+                    <!-- start of form-element -->
+                    <div class="form-element-row mb-5">
+                        <label class="label" asp-for="Phone"></label>
+                        <input type="text" class="form-control" asp-for="Phone" placeholder="09xxxxxxxxx">
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+
+                <div class="col-12">
+                    <!-- start of form-element -->
+                    <div class="form-element-row mb-5">
+                        <label class="label" asp-for="Massage"></label>
+                        <textarea rows="5" class="form-control" asp-for="Massage" placeholder="متن پیام"></textarea>
+                        <span asp-validation-for="Massage" class="text-danger"></span>
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+
+                <div class="col-12">
+                    <!-- start of form-element -->
+                    <div class="form-element-row form-element-row-file mb-5">
+                        <div class="text-center">
+                            <div class="fs-6 fw-bold text-dark">عکس یا ویدیو خود را بارگذاری کنید.</div>
+                        </div>
+                        <div class="custom-input-file">
+                            <span class="btn btn-light">
+                                <input type="file" asp-for="AttachFile" accept=".jpg,.jpeg,.png,.mkv,.mp4" >
+                            </span>
+                        </div>
+                        <div class="text-center">
+                        <span asp-validation-for="AttachFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <!-- end of form-element -->
+                </div>
+
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-primary px-4">ثبت و ارسال</button>
+                </div>
+
+            </div>
+        </form>
+        <!-- end of contact-us-form -->
+    </div>
+</div>
+<!-- end of box => contact-us -->

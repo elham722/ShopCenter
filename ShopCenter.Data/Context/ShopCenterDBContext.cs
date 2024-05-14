@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShopCenter.Domain.Models.AboutUs;
+using ShopCenter.Domain.Models.ContactUs;
 using ShopCenter.Domain.Models.Product;
 using ShopCenter.Domain.Models.User;
 using System;
@@ -22,7 +23,7 @@ namespace ShopCenter.Data.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<AboutUs> AboutUs { get; set; }
-
+        public DbSet<ContactUs> ContactUs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

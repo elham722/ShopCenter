@@ -1,0 +1,131 @@
+﻿@using PersianDate.Standard
+@model ContactUsAdminSideViewModel
+@{
+    ViewData["Title"] = "جزئیات پیام";
+}
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+
+            <div class="widget-header ">
+                <span class="widget-caption">جزئیات پیام</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                </div>
+            </div>
+
+            <form method="post" asp-action="Detail">
+                
+                <div class="widget-body">
+
+                    <div class="well with-header">
+
+                        <!-- Massage Head-->
+                        <div class="header bordered-pink">
+                            <div class="col-md-6">
+                                <label asp-for="Subject"></label>
+                                <span>@Model.Subject.GetDisplayName()</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CreateDate"></label>
+                                <span>@Model.CreateDate.ToFa("d MMM yyyy")</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="FullName"></label>
+                                <span>@Model.FullName</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email"></label>
+                                <span>@Model.Email</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Phone"></label>
+                                <span>@Model.Phone</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="FileName"></label>
+                                <span>
+                                    @{
+                                        switch (Model.FileType)
+                                        {
+                                            case FileTypeTitle.Video:
+                                                <a href="~/assets/videos/contactUs/@Model.FileName"><i class="fa fa-file-video-o"></i></a>
+                                                break;
+
+                                            case FileTypeTitle.Image:
+                                                <a href="~/assets/images/contactUs/@Model.FileName"><i class="fa fa-file-image-o"></i></a>
+                                                break;
+                                            default:
+                                                <label>ندارد</label>
+                                                break;
+                                        }
+                                    }
+                                </span>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Massage body-->
+                        <div class=" margin-top-50 ">
+
+                            <!-- Massage-->
+                            <div class="widget-body">
+                                <div class="form-group">
+                                    <label asp-for="Massage"></label>
+                                    <span class="input-icon icon-right">
+                                        <textarea class="form-control" rows="10" asp-for="Massage" disabled="disabled"></textarea>
+                                    </span>
+                                </div>
+                            </div>
+                            <br />
+                            <!-- Answer-->
+
+                            <div class="form-group">
+                                <label asp-for="Answer"></label>
+                                <span class="input-icon icon-right">
+                                    <textarea class="form-control" rows="10" asp-for="Answer"></textarea>
+                                </span>
+                                <span asp-validation-for="Answer" class="text-danger"></span>
+                            </div>
+
+
+                            <!-- button-->
+
+                            <div>
+                                <div class="form-group " style="direction:ltr">
+                                    <a class="btn btn-darkorange shiny" asp-action="Index" asp-controller="ContactUs">انصراف</a>
+                                    <input class="btn btn-palegreen shiny" type="submit" value="ارسال پاسخ" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Subject" />
+                <input type="hidden" asp-for="CreateDate" />
+                <input type="hidden" asp-for="FullName" />
+                <input type="hidden" asp-for="Email" />
+                <input type="hidden" asp-for="Phone" />
+                <input type="hidden" asp-for="FileName" />
+                <input type="hidden" asp-for="FileType" />
+                <input type="hidden" asp-for="Massage" />
+                <input type="hidden" asp-for="Answer" />
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+

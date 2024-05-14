@@ -39,6 +39,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\Admin\img\Category\" />
     <Folder Include="wwwroot\assets\images\favicon\" />
+    <Folder Include="wwwroot\assets\images\contactUs\" />
+    <Folder Include="wwwroot\assets\videos\contactUs\" />
   </ItemGroup>
 
 </Project>

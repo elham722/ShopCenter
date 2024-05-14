@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopCenter.Data.Context;
 
@@ -11,9 +12,11 @@ using ShopCenter.Data.Context;
 namespace ShopCenter.Data.Migrations
 {
     [DbContext(typeof(ShopCenterDBContext))]
-    partial class ShopCenterDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240514072436_allchanges")]
+    partial class allchanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,61 +58,6 @@ namespace ShopCenter.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AboutUs");
-                });
-
-            modelBuilder.Entity("ShopCenter.Domain.Models.ContactUs.ContactUs", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("AnswerDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("FileType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Massage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Subject")
-                        .HasMaxLength(100)
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ContactUs");
                 });
 
             modelBuilder.Entity("ShopCenter.Domain.Models.Product.Category", b =>
@@ -225,7 +173,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 5, 14, 13, 21, 7, 7, DateTimeKind.Local).AddTicks(5397),
+                            CreateDate = new DateTime(2024, 5, 14, 10, 54, 34, 189, DateTimeKind.Local).AddTicks(3426),
                             IsDefaultForNewUsers = false,
                             IsDelete = false,
                             RoleTiltle = "مدیر سایت"
@@ -233,7 +181,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 5, 14, 13, 21, 7, 7, DateTimeKind.Local).AddTicks(5412),
+                            CreateDate = new DateTime(2024, 5, 14, 10, 54, 34, 189, DateTimeKind.Local).AddTicks(3440),
                             IsDefaultForNewUsers = false,
                             IsDelete = false,
                             RoleTiltle = "دستیار مدیر"
@@ -241,7 +189,7 @@ namespace ShopCenter.Data.Migrations
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2024, 5, 14, 13, 21, 7, 7, DateTimeKind.Local).AddTicks(5414),
+                            CreateDate = new DateTime(2024, 5, 14, 10, 54, 34, 189, DateTimeKind.Local).AddTicks(3442),
                             IsDefaultForNewUsers = true,
                             IsDelete = false,
                             RoleTiltle = "کاربر عادی"

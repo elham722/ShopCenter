@@ -65,7 +65,8 @@ namespace ShopCenter.Application.StaticTools
                 case SiteSections.User:
                     return [Directory.GetCurrentDirectory(), "wwwroot", "images", "users", fileName];
 
-             
+                case SiteSections.ContactUs:
+                    return [Directory.GetCurrentDirectory(), "wwwroot","assets", "images", "contactUs", fileName];
 
             }
             return null;
@@ -78,7 +79,7 @@ namespace ShopCenter.Application.StaticTools
             switch (fileFor)
             {
                 case SiteSections.ContactUs:
-                    return [Directory.GetCurrentDirectory(), "wwwroot", "videos", "contactUs", fileName];
+                    return [Directory.GetCurrentDirectory(), "wwwroot", "assets", "videos", "contactUs", fileName];
 
                
                    
