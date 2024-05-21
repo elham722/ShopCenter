@@ -28,7 +28,7 @@ namespace ShopCenter.Application.Services.Implementation
                 _viewRenderService = viewRenderService;
             }
             #endregion
-            public AddContactUsReturns AddContactUs(ContactUsViewModel contactUs)
+            public async Task<AddContactUsReturns> AddContactUs(ContactUsViewModel contactUs)
             {
                 ContactUs ocontactUs = new ContactUs()
                 {
@@ -81,10 +81,10 @@ namespace ShopCenter.Application.Services.Implementation
 
             }
 
-            public ContactUsAdminSideViewModel GetContactUs(int contactUsId)
+            public async Task<ContactUsAdminSideViewModel> GetContactUs(int contactUsId)
             {
 
-                ContactUs ocontactUs = _contactUsRepository.GetContactUs(contactUsId);
+                ContactUs ocontactUs = await _contactUsRepository.GetContactUs(contactUsId);
                 if (ocontactUs != null)
                 {
                     ContactUsAdminSideViewModel ocontactUsViewModel = new ContactUsAdminSideViewModel()
@@ -110,15 +110,15 @@ namespace ShopCenter.Application.Services.Implementation
                     return null;
             }
 
-            public List<ContactUsListViewModel> GetContactUsList()
+            public async Task<List<ContactUsListViewModel>> GetContactUsList()
             {
-                return _contactUsRepository.GetContactUsList();
+                return await _contactUsRepository.GetContactUsList();
             }
 
-            public bool AnswerToContactUs(int contactUsId, string answer)
+            public async Task<bool> AnswerToContactUs(int contactUsId, string answer)
             {
 
-                ContactUs ocontactUs = _contactUsRepository.GetContactUs(contactUsId);
+                ContactUs ocontactUs =await _contactUsRepository.GetContactUs(contactUsId);
                 if (ocontactUs == null)
                 {
                     return false;
@@ -144,9 +144,9 @@ namespace ShopCenter.Application.Services.Implementation
                 return true;
             }
 
-            public bool ChangeContactUsStatus(int contactUsId)
+            public async Task<bool> ChangeContactUsStatus(int contactUsId)
             {
-                ContactUs ocontactUs = _contactUsRepository.GetContactUs(contactUsId);
+                ContactUs ocontactUs =await _contactUsRepository.GetContactUs(contactUsId);
 
                 if (ocontactUs == null)
                 {

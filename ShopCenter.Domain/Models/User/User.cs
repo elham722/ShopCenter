@@ -1,4 +1,5 @@
 ﻿using ShopCenter.Domain.Models.Common;
+using ShopCenter.Domain.Models.Ticket;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -53,6 +54,10 @@ namespace ShopCenter.Domain.Models.User
         [ForeignKey("RoleId")]
         public Role Role { get; set; }
 
+        public List<Ticket.Ticket> Tickets { get; set; }
+
+        public List<TicketMassege> TicketMasseges { get; set; }
         #endregion
+
     }
 }

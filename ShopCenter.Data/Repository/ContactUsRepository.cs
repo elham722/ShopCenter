@@ -1,4 +1,5 @@
-﻿using ShopCenter.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopCenter.Data.Context;
 using ShopCenter.Domain.Interfaces;
 using ShopCenter.Domain.Models.ContactUs;
 using ShopCenter.Domain.ViewModels.ContactUs.Admin;
@@ -12,21 +13,23 @@ namespace ShopCenter.Data.Repository
 {
     public class ContactUsRepository : IContactUsRepository
     {
+        #region Ctor
         private ShopCenterDBContext _context;
 
         public ContactUsRepository(ShopCenterDBContext context)
         {
             _context = context;
         }
+        #endregion
 
-        public void Add(ContactUs contactUs)
+        public async Task Add(ContactUs contactUs)
         {
-            _context.Add(contactUs);
+           await _context.AddAsync(contactUs);
         }
 
-        public List<ContactUsListViewModel> GetContactUsList()
+        public async Task<List<ContactUsListViewModel>> GetContactUsList()
         {
-            return _context.ContactUs.Select(c => new ContactUsListViewModel()
+            return  _context.ContactUs.Select(c => new ContactUsListViewModel()
             {
                 Id = c.Id,
                 Email = c.Email,
@@ -39,9 +42,9 @@ namespace ShopCenter.Data.Repository
 
         }
 
-        public ContactUs GetContactUs(int id)
+        public async Task<ContactUs> GetContactUs(int id)
         {
-            return _context.ContactUs.FirstOrDefault(c => c.Id == id);
+            return await _context.ContactUs.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public void Update(ContactUs contactUs)
@@ -49,14 +52,14 @@ namespace ShopCenter.Data.Repository
             _context.Update(contactUs);
         }
 
-        public bool IsExistContactUs(int id)
+        public async Task<bool> IsExistContactUs(int id)
         {
-            return _context.ContactUs.Any(c => c.Id == id);
+            return await _context.ContactUs.AnyAsync(c => c.Id == id);
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
 
 

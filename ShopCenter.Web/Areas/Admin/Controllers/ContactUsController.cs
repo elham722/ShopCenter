@@ -7,7 +7,7 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class ContactUsController : Controller
     {
-        #region IoC
+        #region Ctor
         private IContactUsServices _contactUsServices;
 
         public ContactUsController(IContactUsServices contactUsServices)
@@ -17,34 +17,34 @@ namespace ShopCenter.Web.Areas.Admin.Controllers
         #endregion
 
         #region Contact Us List
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<ContactUsListViewModel> model = _contactUsServices.GetContactUsList();
+            List<ContactUsListViewModel> model =await _contactUsServices.GetContactUsList();
             return View(model);
         }
         #endregion
 
         #region Detail Massage
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            ContactUsAdminSideViewModel model = _contactUsServices.GetContactUs(id);
+            ContactUsAdminSideViewModel model =await _contactUsServices.GetContactUs(id);
             if (model == null)
             {
                 return RedirectToAction("Index");
             }
-            _contactUsServices.ChangeContactUsStatus(model.Id);
+            await _contactUsServices.ChangeContactUsStatus(model.Id);
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Detail(ContactUsAdminSideViewModel contactUs)
+        public async Task<IActionResult> Detail(ContactUsAdminSideViewModel contactUs)
         {
             if (!ModelState.IsValid)
             {
                 return View(contactUs);
             }
 
-            _contactUsServices.AnswerToContactUs(contactUs.Id, contactUs.Answer);
+          await  _contactUsServices.AnswerToContactUs(contactUs.Id, contactUs.Answer);
             return RedirectToAction("index");
         }
         #endregion

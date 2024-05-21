@@ -49,18 +49,18 @@ namespace ShopCenter.Web.Controllers
 
         #region Contact Us
 
-        public IActionResult ContactUS()
+        public async Task<IActionResult> ContactUS()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult ContactUS(ContactUsViewModel contactUs)
+        public async Task<IActionResult> ContactUS(ContactUsViewModel contactUs)
         {
             if (!ModelState.IsValid)
             {
                 return View(contactUs);
             }
-            var result = _contactUsService.AddContactUs(contactUs);
+            var result =await _contactUsService.AddContactUs(contactUs);
             if (result == AddContactUsReturns.Done)
             {
                 return RedirectToAction("index");

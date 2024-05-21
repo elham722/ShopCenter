@@ -11,15 +11,15 @@ namespace ShopCenter.Application.Services.Interface
 {
     public interface IContactUsServices
     {
-            AddContactUsReturns AddContactUs(ContactUsViewModel contactUs);
+            Task<AddContactUsReturns> AddContactUs(ContactUsViewModel contactUs);
 
-            List<ContactUsListViewModel> GetContactUsList();
+            Task<List<ContactUsListViewModel>> GetContactUsList();
 
-            ContactUsAdminSideViewModel GetContactUs(int contactUsId);
+        Task<ContactUsAdminSideViewModel> GetContactUs(int contactUsId);
 
-            bool AnswerToContactUs(int contactUsId, string answer);
+            Task<bool> AnswerToContactUs(int contactUsId, string answer);
 
-            bool ChangeContactUsStatus(int contactUsId);
+            Task<bool> ChangeContactUsStatus(int contactUsId);
        
     }
 }
