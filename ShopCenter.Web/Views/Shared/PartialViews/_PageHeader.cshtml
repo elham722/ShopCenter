@@ -111,7 +111,7 @@
                       @if (User.Identity.IsAuthenticated)
                     {
                         <div class="user-option user-option--account">
-                            <a href="profile.html" class="user-option-btn user-option-btn--account">
+                            <a href="/UserPanel" class="user-option-btn user-option-btn--account">
                                 <i class="ri-user-fill icon"></i>
                                 <i class="ri-arrow-down-s-fill icon fs-7 text-muted"></i>
                             </a>
@@ -124,9 +124,7 @@
                                             </div>
                                             <div class="profile-info">
                                                 <a href="#" class="text-decoration-none text-dark fw-bold mb-2">
-                                                    جلال
-                                                    بهرامی
-                                                    راد
+                                                   @User.Identity.Name
                                                 </a>
                                                 <div class="text-muted fs-7 fw-bold">۰۹xxxxxxxxx</div>
                                             </div>
@@ -172,7 +170,7 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">
+                                            <a class="nav-link" href="/LOgOut">
                                                 <i class="nav-link-icon ri-logout-box-r-line"></i>
                                                 خروج
                                             </a>
